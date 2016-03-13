@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+EXEFILE = a2
+=======
 EXEFILE = Subdivision
+>>>>>>> refs/remotes/origin/Frankie-Branch
 LIBS = -lglfw -lGL -lGLU
 
 
