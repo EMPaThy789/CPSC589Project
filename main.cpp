@@ -4,6 +4,9 @@
 #include <vector>
 #include <string> 
 #include <stdlib.h>
+#include "HalfEdge.h"
+#include "Face.h"
+#include "Vertex.h"
 
 using namespace std;
 
@@ -17,9 +20,9 @@ int w, h;
 double mouseX, mouseY;
 
 
+vector<Point> controlPointList;
 int order = 3;
 
-vector<Point> controlPointList;
 double knotSequence[5000];
 int numberOfKnots = 0;
 int geometryToggle = 0;
@@ -48,7 +51,7 @@ Point efficentBasis(int k, double u)
 {
 	int d = deltaFunction(u, k);
 
-	Point c[k-1];
+	Point c[10000];
 	for (int i = 0; i <= k - 1; i++)
 	{
 		// make sure the program doesnt crash
