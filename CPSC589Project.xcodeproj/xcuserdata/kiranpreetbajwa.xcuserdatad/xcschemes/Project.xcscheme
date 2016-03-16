@@ -17,7 +17,7 @@
                BlueprintIdentifier = "3B1AC07F1C98D49A00F193DE"
                BuildableName = "Project"
                BlueprintName = "Project"
-               ReferencedContainer = "container:Project.xcodeproj">
+               ReferencedContainer = "container:CPSC589Project.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "3B1AC07F1C98D49A00F193DE"
             BuildableName = "Project"
             BlueprintName = "Project"
-            ReferencedContainer = "container:Project.xcodeproj">
+            ReferencedContainer = "container:CPSC589Project.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -51,16 +51,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3B1AC07F1C98D49A00F193DE"
             BuildableName = "Project"
             BlueprintName = "Project"
-            ReferencedContainer = "container:Project.xcodeproj">
+            ReferencedContainer = "container:CPSC589Project.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
       <LocationScenarioReference
@@ -74,16 +73,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3B1AC07F1C98D49A00F193DE"
             BuildableName = "Project"
             BlueprintName = "Project"
-            ReferencedContainer = "container:Project.xcodeproj">
+            ReferencedContainer = "container:CPSC589Project.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

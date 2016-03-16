@@ -3,6 +3,8 @@
 #define FACE_H
 
 #include <GLFW/glfw3.h>
+#include <iostream>
+
 // Forward declaration
 class HalfEdge;
 // A single face for the DCEL data structure

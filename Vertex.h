@@ -3,6 +3,8 @@
 #define VERTEX_H
 
 #include <GLFW/glfw3.h>
+#include <iostream>
+
 // Forward declaration
 class HalfEdge;
 

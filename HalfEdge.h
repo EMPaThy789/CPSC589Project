@@ -3,6 +3,7 @@
 #define HALFEDGE_H
 
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 // Forward declaration
 class Vertex;
