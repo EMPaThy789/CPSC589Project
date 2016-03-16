@@ -14,6 +14,7 @@
 		3B1AC09D1C98D72C00F193DE /* Vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1AC0961C98D72C00F193DE /* Vertex.cpp */; };
 		3B1AC09F1C98D77000F193DE /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B1AC09E1C98D77000F193DE /* OpenGL.framework */; };
 		3B1AC0A11C98D78200F193DE /* libglfw.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B1AC0A01C98D78200F193DE /* libglfw.3.1.dylib */; };
+		3B1AC0A51C992D2600F193DE /* obj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1AC0A31C992D2600F193DE /* obj.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,8 @@
 		3B1AC0971C98D72C00F193DE /* Vertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vertex.h; sourceTree = SOURCE_ROOT; };
 		3B1AC09E1C98D77000F193DE /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		3B1AC0A01C98D78200F193DE /* libglfw.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.1.dylib; path = ../../../../../../../opt/local/lib/libglfw.3.1.dylib; sourceTree = "<group>"; };
+		3B1AC0A31C992D2600F193DE /* obj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = obj.cpp; sourceTree = SOURCE_ROOT; };
+		3B1AC0A61C992F1800F193DE /* obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = obj.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +82,8 @@
 			children = (
 				3B1AC08E1C98D72C00F193DE /* DCEL.cpp */,
 				3B1AC08F1C98D72C00F193DE /* DCEL.h */,
+				3B1AC0A31C992D2600F193DE /* obj.cpp */,
+				3B1AC0A61C992F1800F193DE /* obj.h */,
 				3B1AC0901C98D72C00F193DE /* Face.cpp */,
 				3B1AC0911C98D72C00F193DE /* Face.h */,
 				3B1AC0921C98D72C00F193DE /* HalfEdge.cpp */,
@@ -149,6 +154,7 @@
 				3B1AC09D1C98D72C00F193DE /* Vertex.cpp in Sources */,
 				3B1AC0991C98D72C00F193DE /* Face.cpp in Sources */,
 				3B1AC09A1C98D72C00F193DE /* HalfEdge.cpp in Sources */,
+				3B1AC0A51C992D2600F193DE /* obj.cpp in Sources */,
 				3B1AC09B1C98D72C00F193DE /* main.cpp in Sources */,
 				3B1AC0981C98D72C00F193DE /* DCEL.cpp in Sources */,
 			);
