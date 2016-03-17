@@ -17,221 +17,56 @@ struct Point
 
 GLFWwindow *window;
 int w, h;
+float x, y, z, r;
+
 double mouseX, mouseY;
-
-
-vector<Point> controlPointList;
-int order = 3;
-
-double knotSequence[5000];
-int numberOfKnots = 0;
-int geometryToggle = 0;
-Point *selectedControlPoint;
-int selectedIndex = -1;
-double inc = 0.01;
-double geoInc = 0;
+const int WINDOW_HEIGHT = 600,
+          WINDOW_WIDTH = 800;
 
 
 
 
 
-// delta index function
-int deltaFunction(double u, int k)
-{
-	for (int i = 0; i < numberOfKnots + k - 2; i++)
-	{
-		if (u >= knotSequence[i] && u < knotSequence[i + 1])
-			return i;
-	}
-	return -1;
-}
-
-
-Point efficentBasis(int k, double u)
-{
-	int d = deltaFunction(u, k);
-
-	Point c[10000];
-	for (int i = 0; i <= k - 1; i++)
-	{
-		// make sure the program doesnt crash
-		if (d - i < controlPointList.size())
-		{
-			c[i] = controlPointList[d - i];
-		}
-	}
-
-	for (int r = k; r >= 2; r--)
-	{
-		
-
-		int i = d;
-		for (int s = 0; s <= r - 2; s++)
-		{
-			double omega = (u - knotSequence[i]) / (knotSequence[i + r - 1] - knotSequence[i]);
-			c[s].x = omega * c[s].x + (1 - omega) * c[s + 1].x;
-			c[s].y = omega * c[s].y + (1 - omega) * c[s + 1].y;
-
-			i--;
-		}
-	}
-	return c[0];
-}
-
-Point efficentBasisDrawGeo(int k, double u)
-{
-	int d = deltaFunction(u, k);
-
-	Point c[1000];
-	for (int i = 0; i <= k - 1; i++)
-	{
-		// make sure the program doesnt crash
-		if (d - i < controlPointList.size())
-		{
-			c[i] = controlPointList[d - i];
-		}
-	}
-
-	for (int r = k; r >= 2; r--)
-	{
-		if (geometryToggle)
-		{
-			glColor3f(0.0f, 1.0f, 0.5f);
-			glBegin(GL_LINE_STRIP);
-		}
-
-		int i = d;
-		for (int s = 0; s <= r - 2; s++)
-		{
-			double omega = (u - knotSequence[i]) / (knotSequence[i + r - 1] - knotSequence[i]);
-			c[s].x = omega * c[s].x + (1 - omega) * c[s + 1].x;
-			c[s].y = omega * c[s].y + (1 - omega) * c[s + 1].y;
-
-			if (geometryToggle)
-				glVertex2d(c[s].x, c[s].y);
-
-			i--;
-		}
-		if (geometryToggle)
-			glEnd();
-	}
-
-
-	glPointSize(10.0);
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glBegin(GL_POINTS);
-	glVertex2d(c[0].x, c[0].y);
-	glEnd();
-	return c[0];
-}
-
-
-double bsplineBasis(int i, int k, double u)
-{
-	if (k == 1)
-	{
-		if (knotSequence[i] <= u && u < knotSequence[i + 1])
-			return 1;
-		return 0;
-	}
-
-	return 
-		bsplineBasis(i, k - 1, u) * ((u - knotSequence[i]) / (knotSequence[i + k - 1])) + 
-		bsplineBasis(i + 1, k - 1, u) * (knotSequence[i + k] - u) / ((knotSequence[i + k] - knotSequence[i + 1]));
-}
-
-void updateKnotSequence()
-{
-	if (controlPointList.size() - order + 2 > 0)
-	{
-		numberOfKnots = order + controlPointList.size();
-		double stepSize =(controlPointList.size() - order + 1);
-		cout << (controlPointList.size() - order + 2);
-		
-		int z = 0;
-		for (int i = 0; i < order; i++)
-		{
-			knotSequence[z] = 0;
-			z++;
-		}
-
-		for (int i = 0; i < numberOfKnots - 2 * order; i++)
-		{
-			knotSequence[z] = (1 / stepSize) * (i + 1);
-			z++;
-		}
-
-		for (int i = 0; i < order; i++)
-		{
-			knotSequence[z] = 1;
-			z++;
-		}
-	}
-}
 
 void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 {
+	
+	
+
+	if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		y -= 0.1;
+	}
+	if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		y += 0.1;
+	}
+	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		z -= 0.1;
+	}
+	if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		z += 0.1;
+	}
+	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		x -= 0.1;
+	}
+	if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		x += 0.1;
+	}
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		geoInc -= inc;
-		if (geoInc < 0)
-			geoInc = 0;
+		r -= 1;
 	}
-
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		geoInc += inc;
-		if (geoInc > 1)
-			geoInc = 1;
-	}
-	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		order++;
-		updateKnotSequence();
+		r += 1;
 	}
 
-	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		order--;
-		updateKnotSequence();
-	}
-
-	if (key == GLFW_KEY_X && (action == GLFW_PRESS))
-	{
-		for (int i = 0; i < numberOfKnots; i++)
-		{
-
-			cout << knotSequence[i] << '\n';
-		}
-	}
 	
-	if (key == GLFW_KEY_T && (action == GLFW_PRESS))
-	{
-		if (geometryToggle)
-			geometryToggle = 0;
-		else
-			geometryToggle = 1;
-	}
-
-	if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS))
-	{
-		selectedControlPoint = NULL;
-		int i;
-		for (i = 0; i < controlPointList.size(); i++)
-		{
-			double x = controlPointList[i].x;
-			double y = controlPointList[i].y;
-			cout << x << ' ' << y << '\n';
-		}
-	}
-	
-	// delete control point if one is selected
-	if (key == GLFW_KEY_DELETE && (action == GLFW_PRESS) && selectedIndex != -1)
-	{
-		controlPointList.erase(controlPointList.begin() + selectedIndex);
-		updateKnotSequence();
-		selectedControlPoint = NULL;
-	}
 	
 }
 
@@ -241,40 +76,10 @@ void mouseClick(GLFWwindow *sender, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		// no control point selected
-		if (selectedControlPoint == NULL)
-		{
-			// add new control point
-			Point p;
-			p.x = mouseX;
-			p.y = mouseY;
-			controlPointList.push_back(p);
-			cout << mouseX << ' ' << mouseY << '\n';
-			updateKnotSequence();
-		}
-		else
-		{
-			// move control points if one is selected
-			(*selectedControlPoint).x = mouseX;
-			(*selectedControlPoint).y = mouseY;
-		}
 	}
 
 
-	// selecting control points
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-	{
-		for (int i = 0; i < controlPointList.size(); i++)
-		{
-			double x = controlPointList[i].x;
-			double y = controlPointList[i].y;
-			if (40 > (x - mouseX) * (x - mouseX) + (y - mouseY) * (y - mouseY))
-			{
-				selectedControlPoint = &controlPointList[i];
-				selectedIndex = i;
-			}
-		}
-	}
+	
 }
 
 
@@ -292,85 +97,87 @@ void render()
 	//Functions for changing transformation matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, 0.0f);
-	glRotatef(0, 0.0f, 0.0f, 0.0f);
-	glScalef(1.0f, 1.0f, 1.0f);
+	//glTranslatef(0.0f, 0.0f, 0.0f); 
+	//glTranslatef(-0.5f, 2.0f, 0.5f);
+	glRotatef(r, 0.0f, 1.0f, 0.0f);
+	glTranslatef(x, y, z);
+	//glScalef(0.5f, 0.5f, 0.5f);
 
 	//Functions for changing projection mdatrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, 500.0, 500.0, 0, 1.0, -1.0);
-	//gluPerspective (fov, aspect ratio, near plane, far plane)
-	//glFrustum
+	//glOrtho(0, 500.0, 500.0, 0, 1.0, -1.0); 
+	float aspect = ((float)WINDOW_HEIGHT) / WINDOW_WIDTH;
+	//gluPerspective(90.0f, aspect, 0.1f, 100.0f);
+	float near = 0.01f;
+	float far = 10.0f;
+	float fov = 90.0f;
 
-	glPointSize(10.0);
-	// draw control points
-	for (int i = 0; i < controlPointList.size(); i++)
-	{
-		if (&controlPointList[i] == selectedControlPoint)
-		{
-			glColor3f(0.0f, 1.0f, 0.0f);
-		}
-		else
-		{
-			glColor3f(1.0f, 0.0f, 0.0f);
-		}
-		glBegin(GL_POINTS);
-		glVertex2d(controlPointList[i].x, controlPointList[i].y);
-		glEnd();
-	}
-
-	// draw bspline curve
-
-	if (controlPointList.size() >= order)
-	{
-		glBegin(GL_LINE_STRIP);
-		glColor3f(0.0f, 1.0f, 1.0f);
+	double fH = tan(fov / 360 * 3.1415926535897932384626433832795) * near;
+	double fW = fH * aspect;
 
 
-		for (double i = 0; i <= 1; i += inc)
-		{
-			Point p = efficentBasis(order, i);
-			glVertex2d(p.x, p.y);
-		}
-		glEnd();
+	glFrustum(-fW, fW, -fH, fH, near, far);
 
-		if (geometryToggle)
-			efficentBasisDrawGeo(order, geoInc);
-	}
+	
+	
+	glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
+	// Top face (y = 1.0f)
+	// Define vertices in counter-clockwise (CCW) order with normal pointing out
+	glColor3f(0.0f, 1.0f, 0.0f);     // Green
+	glVertex3f(1.0f, 1.0f, -1.0f);
+	glVertex3f(-1.0f, 1.0f, -1.0f);
+	glVertex3f(-1.0f, 1.0f, 1.0f);
+	glVertex3f(1.0f, 1.0f, 1.0f);
 
+	// Bottom face (y = -1.0f)
+	glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+	glVertex3f(1.0f, -1.0f, 1.0f);
+	glVertex3f(-1.0f, -1.0f, 1.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);
+	glVertex3f(1.0f, -1.0f, -1.0f);
 
+	// Front face  (z = 1.0f)
+	glColor3f(1.0f, 0.0f, 0.0f);     // Red
+	glVertex3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(-1.0f, 1.0f, 1.0f);
+	glVertex3f(-1.0f, -1.0f, 1.0f);
+	glVertex3f(1.0f, -1.0f, 1.0f);
 
-	// drawing line through control points
-	if (geometryToggle)
-	{
-		glBegin(GL_LINE_STRIP);
-		glColor3f(1.0f, 1.0f, 0.0f);
-		for (int i = 0; i < controlPointList.size(); i++)
-		{
-			double x = controlPointList[i].x;
-			double y = controlPointList[i].y;
-			glVertex2d(x, y);
-		}
-		glEnd();
-	}
+	// Back face (z = -1.0f)
+	glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
+	glVertex3f(1.0f, -1.0f, -1.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);
+	glVertex3f(-1.0f, 1.0f, -1.0f);
+	glVertex3f(1.0f, 1.0f, -1.0f);
 
+	// Left face (x = -1.0f)
+	glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+	glVertex3f(-1.0f, 1.0f, 1.0f);
+	glVertex3f(-1.0f, 1.0f, -1.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);
+	glVertex3f(-1.0f, -1.0f, 1.0f);
+
+	// Right face (x = 1.0f)
+	glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
+	glVertex3f(1.0f, 1.0f, -1.0f);
+	glVertex3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(1.0f, -1.0f, 1.0f);
+	glVertex3f(1.0f, -1.0f, -1.0f);
+	glEnd();  // End of drawing color-cube
 
 }
 
 int main(int argc, char* argv[])
 {
-	if (argc >= 2)
-	{
-		order = atoi(argv[1]);
-		inc = atof(argv[2]);
-		cout << order << ' ' << inc << '\n';
-	}
+	x = 0;
+	y = 0;
+	z = 0;
+	r = 0;
 
 	if (!glfwInit())
 		return 1;
-
-	window = glfwCreateWindow(500, 500, "My Window", NULL, NULL);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "My Window", NULL, NULL);
 	if (!window)
 		return 1;
 
@@ -378,6 +185,7 @@ int main(int argc, char* argv[])
 	glfwSetKeyCallback(window, keyboard);
 	glfwSetMouseButtonCallback(window, mouseClick);
 	glfwSetCursorPosCallback(window, mousePos);
+	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);
 		glViewport(0, 0, w, h);
