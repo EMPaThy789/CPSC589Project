@@ -17,7 +17,7 @@ struct Point
 
 GLFWwindow *window;
 int w, h;
-float x, y, z, r;
+float x, y, z, rY, rX;
 
 double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
@@ -59,11 +59,19 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	}
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		r -= 1;
+		rY -= 2;
 	}
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		r += 1;
+		rY += 2;
+	}
+	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		rX -= 2;
+	}
+	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		rX += 2;
 	}
 
 	
@@ -99,15 +107,16 @@ void render()
 	glLoadIdentity();
 	//glTranslatef(0.0f, 0.0f, 0.0f); 
 	//glTranslatef(-0.5f, 2.0f, 0.5f);
-	glRotatef(r, 0.0f, 1.0f, 0.0f);
 	glTranslatef(x, y, z);
+	glRotatef(rY, 0.0f, 1.0f, 0.0f);
+	glRotatef(rX, 1.0f, 0.0f, 0.0f);
 	//glScalef(0.5f, 0.5f, 0.5f);
 
 	//Functions for changing projection mdatrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//glOrtho(0, 500.0, 500.0, 0, 1.0, -1.0); 
-	float aspect = ((float)WINDOW_HEIGHT) / WINDOW_WIDTH;
+	float aspect = 1;// ((float)WINDOW_HEIGHT) / WINDOW_WIDTH;
 	//gluPerspective(90.0f, aspect, 0.1f, 100.0f);
 	float near = 0.01f;
 	float far = 10.0f;
@@ -172,8 +181,9 @@ int main(int argc, char* argv[])
 {
 	x = 0;
 	y = 0;
-	z = 0;
-	r = 0;
+	z = -3;
+	rX = 0;
+	rY = 0;
 
 	if (!glfwInit())
 		return 1;
