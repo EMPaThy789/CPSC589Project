@@ -2,6 +2,9 @@
 #ifndef DCEL_H
 #define DCEL_H
 #include <GLFW/glfw3.h>
+#include "Face.h";
+#include "HalfEdge.h";
+#include "Vertex.h";
 #include <vector>
 
 using namespace std;
@@ -15,12 +18,12 @@ class Face;
 class DCEL
 {
 public:
+	// ## Variables ##
+	std::vector<Face> faceList;
+	std::vector<Vertex> vertexList;
+	std::vector<HalfEdge> halfEdgeList;
 	// ## Constructor ##
 	DCEL();
-	// ## Variables ##
-	vector<Face> faceList;
-	vector<Vertex> vertexList;
-	vector<HalfEdge> halfEdgeList;
 	// ## Functions ##
 
 private:
