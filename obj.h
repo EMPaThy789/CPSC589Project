@@ -12,13 +12,14 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
 // Forward declaration
 
-// Class for one half edge
-class HalfEdge
+// Class for parsing the object file
+class Obj
 {
 public:
     // ## Constructor ##
@@ -26,7 +27,7 @@ public:
     // ## Variables ##
 
     // ## Functions ##
-    
+    Obj(string Filename);
     
     
 protected:
