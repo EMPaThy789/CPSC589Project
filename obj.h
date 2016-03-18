@@ -13,6 +13,8 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cstdlib>
+#include <string>
 
 using namespace std;
 
@@ -32,9 +34,14 @@ public:
     
 protected:
     // ## Variables ##
-    vector < vector< vector<int> > > vertex;        //Keeps track of the vertices of the object
-    vector < vector< vector<int> > > face;          //Keeps track of the faces of the object
-
+    vector <float> vertexX;        //Keeps track of the vertices of the object
+    vector <float> vertexY;
+    vector <float> vertexZ;
+    
+    vector <int> face1;          //Keeps track of the faces of the object
+    vector <int> face2;
+    vector <int> face3;
+    
     
     // ## Functions ##
     
