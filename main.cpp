@@ -1,3 +1,12 @@
+/**
+main.cpp
+main entrypoint into program
+
+@author
+Lanqin Yuan
+Kiranpreet Bajwa 
+Aleks Djuric
+*/
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <math.h>
@@ -5,7 +14,6 @@
 #include <string> 
 #include <stdlib.h>
 #include "DCEL.h"
-#include "ObjReader.h"
 
 using namespace std;
 
@@ -199,7 +207,20 @@ int main(int argc, char* argv[])
 	glfwSetMouseButtonCallback(window, mouseClick);
 	glfwSetCursorPosCallback(window, mousePos);
 
-	dcel.readOBJ("prism.obj");
+
+	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light0_position[] = { 0.0, -1.0, -1.0, 0.0 };
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
+
+	dcel.readOBJ("cube.obj");
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);

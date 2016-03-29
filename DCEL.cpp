@@ -1,5 +1,17 @@
-#include "DCEL.h"
+/**
+DCEL.cpp
 
+doubly linked edge list
+main data structure for storing mesh infomation
+also where subdivision occurs
+
+@author
+Lanqin Yuan
+Kiranpreet Bajwa
+Aleks Djuric
+*/
+
+#include "DCEL.h"
 using namespace std;
 
 // Implementation of doublely connected edge list (DCEL) aka half-edge data structure
@@ -29,6 +41,7 @@ void DCEL::readOBJ(string fileName)
 
 		string line;
 
+		int vertexIndex = 0;
 		while (!file.eof())
 		{
 			//file >> word;
@@ -38,20 +51,37 @@ void DCEL::readOBJ(string fileName)
 			file >> var1 >> var2 >> var3 >> var4;
 
 			
-			if (var1.find('v') != string::npos)
+			if (var1[0] == 'v')
 			{
-				// read into DCEL structure
-				Vertex* v = (Vertex*)malloc(sizeof(struct Vertex));
-				v->x = var2;
-				v->y = var3;
-				v->z = var4;
-				vertexList.push_back(v);
+				// read normals for vertex
+				if (var1[1] == 'n')
+				{
+					Vertex* v = vertexList[vertexIndex];
+					// set normals
+					v->nx = var3;
+					v->ny = var3;
+					v->nz = var3;
+					vertexIndex++;
+				}
+				else 
+				// read vertex data
+				{
+
+					// read into DCEL structure
+					Vertex* v = (Vertex*)malloc(sizeof(struct Vertex));
+					v->x = var2;
+					v->y = var3;
+					v->z = var4;
+					vertexList.push_back(v);
+				}
 			}
+			
+			
 
 			map <pair<unsigned int, unsigned int>, HalfEdge*> Edges;
 						
 			// assumption is made that mesh is entirely triagular
-			if (var1.find('f') != string::npos)
+			if (var1[0] == 'f')
 			{
 				Face* f = (Face*)malloc(sizeof(struct Face));
 				HalfEdge* he1 = (HalfEdge*)malloc(sizeof(struct HalfEdge));
@@ -120,11 +150,16 @@ void DCEL::drawMesh()
 			v[i] = he->vertex;
 			he = he->next;
 		}
-		
-		glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+
+		glColor3f(1.0f, 0.0f, 0.0f);     // red
+		glNormal3f(v[0]->nx, v[0]->ny, v[0]->nz);
 		glVertex3f(v[0]->x, v[0]->y, v[0]->z);
+		glNormal3f(v[1]->nx, v[1]->ny, v[1]->nz);
 		glVertex3f(v[1]->x, v[1]->y, v[1]->z);
+		glNormal3f(v[2]->nx, v[2]->ny, v[2]->nz);
 		glVertex3f(v[2]->x, v[2]->y, v[2]->z);
+
+
 	}
 	glEnd();
 }

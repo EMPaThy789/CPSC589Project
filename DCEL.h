@@ -1,4 +1,17 @@
-// This is start of the header guard.  ADD_H can be any unique name.  By convention, we use the name of the header file.
+/**
+DCEL.h
+
+doubly linked edge list header file
+main data structure for storing mesh infomation
+also where subdivision occurs
+
+
+@author
+Lanqin Yuan
+Kiranpreet Bajwa
+Aleks Djuric
+*/
+
 #ifndef DCEL_H
 #define DCEL_H
 #include <GLFW/glfw3.h>
@@ -23,16 +36,22 @@ struct HalfEdge
 };
 struct Vertex
 {
+	// position
 	float x;
 	float y;
 	float z;
+	// normals
+	float nx;
+	float ny;
+	float nz;
 
-	HalfEdge* halfEdge;  // one of the half-edges emantating from the vertex
+	// one of the half-edges emantating from the vertex
+	HalfEdge* halfEdge;  
 };
 struct Face
 {
-
-	HalfEdge* halfEdge;  // one of the half-edges bordering the face
+	// one of the half-edges bordering the face
+	HalfEdge* halfEdge;  
 };
 
 
