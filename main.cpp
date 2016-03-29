@@ -1,12 +1,19 @@
+/**
+main.cpp
+main entrypoint into program
+
+@author
+Lanqin Yuan
+Kiranpreet Bajwa 
+Aleks Djuric
+*/
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <math.h>
 #include <vector>
 #include <string> 
 #include <stdlib.h>
-#include "HalfEdge.h"
-#include "Face.h"
-#include "Vertex.h"
+#include "DCEL.h"
 
 using namespace std;
 
@@ -23,6 +30,7 @@ double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
           WINDOW_WIDTH = 800;
 
+DCEL dcel;
 
 
 
@@ -30,17 +38,7 @@ const int WINDOW_HEIGHT = 600,
 
 void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 {
-	
-	
-
-	if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		y -= 0.1;
-	}
-	if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		y += 0.1;
-	}
+	// backward and forward translation
 	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		z -= 0.1;
@@ -49,6 +47,7 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		z += 0.1;
 	}
+	/* these seem a bit rekt atm so dont use
 	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		x -= 0.1;
@@ -57,6 +56,16 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		x += 0.1;
 	}
+	if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		y -= 0.1;
+	}
+	if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		y += 0.1;
+	}*/
+
+	// rotation
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		rY -= 2;
@@ -116,10 +125,10 @@ void render()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//glOrtho(0, 500.0, 500.0, 0, 1.0, -1.0); 
-	float aspect = 1;// ((float)WINDOW_HEIGHT) / WINDOW_WIDTH;
+	float aspect = ((float)WINDOW_WIDTH) / WINDOW_HEIGHT;
 	//gluPerspective(90.0f, aspect, 0.1f, 100.0f);
 	float near = 0.01f;
-	float far = 10.0f;
+	float far = 30.0f;
 	float fov = 90.0f;
 
 	double fH = tan(fov / 360 * 3.1415926535897932384626433832795) * near;
@@ -128,9 +137,9 @@ void render()
 
 	glFrustum(-fW, fW, -fH, fH, near, far);
 
+	dcel.drawMesh();
 	
-	
-	glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
+	/*glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
 	// Top face (y = 1.0f)
 	// Define vertices in counter-clockwise (CCW) order with normal pointing out
 	glColor3f(0.0f, 1.0f, 0.0f);     // Green
@@ -173,7 +182,7 @@ void render()
 	glVertex3f(1.0f, 1.0f, 1.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);
-	glEnd();  // End of drawing color-cube
+	glEnd();  // End of drawing color-cube*/
 
 }
 
@@ -181,9 +190,11 @@ int main(int argc, char* argv[])
 {
 	x = 0;
 	y = 0;
-	z = -3;
+	z = -10;
 	rX = 0;
 	rY = 0;
+	
+
 
 	if (!glfwInit())
 		return 1;
@@ -195,6 +206,21 @@ int main(int argc, char* argv[])
 	glfwSetKeyCallback(window, keyboard);
 	glfwSetMouseButtonCallback(window, mouseClick);
 	glfwSetCursorPosCallback(window, mousePos);
+
+
+	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light0_position[] = { 0.0, -1.0, -1.0, 0.0 };
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
+
+	dcel.readOBJ("cube.obj");
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);

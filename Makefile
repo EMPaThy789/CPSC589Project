@@ -1,6 +1,6 @@
 EXEFILE = Subdivision
 LIBS = -lglfw -lGL -lGLU
-OBJS = main.o DCEL.o Face.o HalfEdge.o Vertex.o
+OBJS = main.o DCEL.o
 
 
 $(EXEFILE): main.o
@@ -17,9 +17,3 @@ main.o: main.cpp
 	g++ -c main.cpp
 DCEL.o: DCEL.cpp
 	g++ -c DCEL.cpp
-Face.o: Face.cpp
-	g++ -c Face.cpp
-HalfEdge.o: HalfEdge.cpp
-	g++ -c HalfEdge.cpp
-Vertex.o: Vertex.cpp
-	g++ -c Vertex.cpp
