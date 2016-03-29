@@ -25,9 +25,11 @@ DCEL::DCEL()
 // Methods go here
 void DCEL::readOBJ(string fileName)
 {
-	ifstream file;
+	//ifstream file;
 
-	file.open(fileName);
+	//file.open(fileName);
+    
+    ifstream file(fileName.c_str());
 
 	//cout << getcwd(NULL, 0);
 
