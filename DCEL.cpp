@@ -138,15 +138,19 @@ void DCEL::readOBJ(string fileName)
 // actually draw the mesh
 void DCEL::drawMesh()
 {
+    Face* f;
+
 	glBegin(GL_TRIANGLES);
-	for_each (Face* f in faceList)
-	{
+    for (int i = 0; i < faceList.size(); i++){
 		Vertex* v[3];
 
+        f = faceList[i];
+        //cout<< faceList.size() << " THIs is the size " << endl;
 		HalfEdge* he = f->halfEdge;
 
 		for (int i = 0; i < 3; i++)
 		{
+            //cout<< "HERE " << he->vertex;
 			v[i] = he->vertex;
 			he = he->next;
 		}
