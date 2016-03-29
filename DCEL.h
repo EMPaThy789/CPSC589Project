@@ -2,12 +2,38 @@
 #ifndef DCEL_H
 #define DCEL_H
 #include <GLFW/glfw3.h>
-#include "Face.h";
-#include "HalfEdge.h";
-#include "Vertex.h";
 #include <vector>
+#include <stdlib.h> 
 
-using namespace std;
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <string>
+#include <map>
+
+
+struct Vertex;
+struct Face;
+struct HalfEdge
+{
+	Vertex* vertex;   // vertex at the end of the half-edge
+	HalfEdge* pair;   // oppositely oriented adjacent half-edge 
+	Face* face;	      // face the half-edge borders
+	HalfEdge* next;   // next half-edge around the face
+};
+struct Vertex
+{
+	float x;
+	float y;
+	float z;
+
+	HalfEdge* halfEdge;  // one of the half-edges emantating from the vertex
+};
+struct Face
+{
+
+	HalfEdge* halfEdge;  // one of the half-edges bordering the face
+};
 
 
 // Forward declaration
@@ -19,17 +45,18 @@ class DCEL
 {
 public:
 	// ## Variables ##
-	std::vector<Face> faceList;
-	std::vector<Vertex> vertexList;
-	std::vector<HalfEdge> halfEdgeList;
+	std::vector<Face*> faceList;
+	std::vector<Vertex*> vertexList;
+	std::vector<HalfEdge*> halfEdgeList;
 	// ## Constructor ##
 	DCEL();
 	// ## Functions ##
+	void readOBJ(std::string fileName);
+	void drawMesh();
 
 private:
 	// ## Variables ##
 	// ## Functions ##
-
 
 };
 
