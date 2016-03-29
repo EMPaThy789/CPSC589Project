@@ -108,17 +108,17 @@ void DCEL::readOBJ(string fileName)
 				he2->vertex = v2;
 				he3->vertex = v3;
 
-				if (Edges[make_pair(var2, var3)] = NULL)
+				if (Edges[make_pair(var2, var3)] == NULL)
 					Edges[make_pair(var2, var3)] = he1;
 				else
 					he1->pair = Edges[make_pair(var2, var3)];
 
-				if (Edges[make_pair(var3, var4)] = NULL)
+				if (Edges[make_pair(var3, var4)] == NULL)
 					Edges[make_pair(var3, var4)] = he2;
 				else
 					he2->pair = Edges[make_pair(var3, var4)];
 
-				if (Edges[make_pair(var4, var2)] = NULL)
+				if (Edges[make_pair(var4, var2)] == NULL)
 					Edges[make_pair(var4, var2)] = he3;
 				else
 					he3->pair = Edges[make_pair(var4, var2)];
@@ -139,7 +139,7 @@ void DCEL::readOBJ(string fileName)
 void DCEL::drawMesh()
 {
 	glBegin(GL_TRIANGLES);
-	for each (Face* f in faceList)
+	for_each (Face* f in faceList)
 	{
 		Vertex* v[3];
 
