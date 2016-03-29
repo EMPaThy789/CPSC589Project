@@ -7,6 +7,8 @@
 #include "Vertex.h";
 #include <vector>
 
+using namespace std;
+
 
 // Forward declaration
 class HalfEdge;

@@ -7,6 +7,7 @@
 #include "HalfEdge.h"
 #include "Face.h"
 #include "Vertex.h"
+#include "obj.h"
 
 using namespace std;
 
@@ -185,6 +186,8 @@ int main(int argc, char* argv[])
 	rX = 0;
 	rY = 0;
 
+    //Obj thisOne = Obj("cube.obj");
+    
 	if (!glfwInit())
 		return 1;
 	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "My Window", NULL, NULL);
