@@ -220,7 +220,7 @@ int main(int argc, char* argv[])
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_NORMALIZE);
 
-	dcel.readOBJ("cube.obj");
+	dcel.readOBJ("teapot.obj");
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);

@@ -25,9 +25,11 @@ DCEL::DCEL()
 // Methods go here
 void DCEL::readOBJ(string fileName)
 {
-	ifstream file;
+	//ifstream file;
 
-	file.open(fileName);
+	//file.open(fileName);
+    
+    ifstream file(fileName.c_str());
 
 	//cout << getcwd(NULL, 0);
 
@@ -108,17 +110,17 @@ void DCEL::readOBJ(string fileName)
 				he2->vertex = v2;
 				he3->vertex = v3;
 
-				if (Edges[make_pair(var2, var3)] = NULL)
+				if (Edges[make_pair(var2, var3)] == NULL)
 					Edges[make_pair(var2, var3)] = he1;
 				else
 					he1->pair = Edges[make_pair(var2, var3)];
 
-				if (Edges[make_pair(var3, var4)] = NULL)
+				if (Edges[make_pair(var3, var4)] == NULL)
 					Edges[make_pair(var3, var4)] = he2;
 				else
 					he2->pair = Edges[make_pair(var3, var4)];
 
-				if (Edges[make_pair(var4, var2)] = NULL)
+				if (Edges[make_pair(var4, var2)] == NULL)
 					Edges[make_pair(var4, var2)] = he3;
 				else
 					he3->pair = Edges[make_pair(var4, var2)];
@@ -138,24 +140,30 @@ void DCEL::readOBJ(string fileName)
 // actually draw the mesh
 void DCEL::drawMesh()
 {
+    Face* f;
+
 	glBegin(GL_TRIANGLES);
-	for each (Face* f in faceList)
-	{
+    for (int i = 0; i < faceList.size(); i++){
 		Vertex* v[3];
 
+        f = faceList[i];
+        //cout<< faceList.size() << " THIs is the size " << endl;
 		HalfEdge* he = f->halfEdge;
 
 		for (int i = 0; i < 3; i++)
 		{
+            //cout<< "HERE " << he->vertex;
 			v[i] = he->vertex;
 			he = he->next;
 		}
-
 		glColor3f(1.0f, 0.0f, 0.0f);     // red
 		glNormal3f(v[0]->nx, v[0]->ny, v[0]->nz);
 		glVertex3f(v[0]->x, v[0]->y, v[0]->z);
+
+
 		glNormal3f(v[1]->nx, v[1]->ny, v[1]->nz);
 		glVertex3f(v[1]->x, v[1]->y, v[1]->z);
+
 		glNormal3f(v[2]->nx, v[2]->ny, v[2]->nz);
 		glVertex3f(v[2]->x, v[2]->y, v[2]->z);
 
