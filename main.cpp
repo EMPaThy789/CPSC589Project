@@ -24,7 +24,7 @@ struct Point
 
 GLFWwindow *window;
 int w, h;
-float x, y, z, rY, rX;
+float x, y, z, rY, rX,lx,ly,lz =0;
 
 double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
@@ -47,6 +47,33 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		z += 0.1;
 	}
+	
+	//LIGHT CONTROLS
+	if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		lx -= 0.4;
+	}
+	if (key == GLFW_KEY_J && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		lx += 0.4;
+	}
+	if (key == GLFW_KEY_I && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		ly -= 0.4;
+	}
+	if (key == GLFW_KEY_K && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		ly -= 0.4;
+	}
+	
+	if (key == GLFW_KEY_O && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		lz += 0.4;
+	}if (key == GLFW_KEY_L && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		lz -= 0.4;
+	}
+
 	/* these seem a bit rekt atm so dont use
 	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
@@ -120,6 +147,19 @@ void render()
 	glRotatef(rY, 0.0f, 1.0f, 0.0f);
 	glRotatef(rX, 1.0f, 0.0f, 0.0f);
 	//glScalef(0.5f, 0.5f, 0.5f);
+	
+	
+	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light0_position[] = { 0.0+lx, -1.0+ly, -1.0+lz, 0.0 };
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
 
 	//Functions for changing projection mdatrix
 	glMatrixMode(GL_PROJECTION);
@@ -193,7 +233,6 @@ int main(int argc, char* argv[])
 	z = -10;
 	rX = 0;
 	rY = 0;
-	
 
 
 	if (!glfwInit())
@@ -208,19 +247,8 @@ int main(int argc, char* argv[])
 	glfwSetCursorPosCallback(window, mousePos);
 
 
-	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light0_position[] = { 0.0, -1.0, -1.0, 0.0 };
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_SMOOTH);
-	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_NORMALIZE);
 
-	dcel.readOBJ("teapot.obj");
+	dcel.readOBJ("cube.obj");
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);

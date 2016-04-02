@@ -7,7 +7,7 @@ $(EXEFILE): main.o DCEL.o
 	g++ $(LIBS) -o $(EXEFILE) $(OBJS)
 	
 clean:
-	rm $(EXEFILE) (OBJS)
+	rm $(EXEFILE) $(OBJS)
 
 # OBJS
 # add more for each new file
