@@ -25,7 +25,7 @@ struct Point
 GLFWwindow *window;
 int w, h;
 float x, y, z, rY, rX;
-
+int wireframe = 0;
 double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
           WINDOW_WIDTH = 800;
@@ -64,6 +64,10 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		y += 0.1;
 	}*/
+	if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS))
+	{
+		dcel.subdivide();
+	}
 
 	// rotation
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
@@ -81,6 +85,14 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		rX += 2;
+	}
+
+	if (key == GLFW_KEY_L && (action == GLFW_PRESS) )
+	{
+		if (wireframe)
+			wireframe = 0;
+		else 
+			wireframe = 1;
 	}
 
 	
@@ -133,7 +145,10 @@ void render()
 
 	double fH = tan(fov / 360 * 3.1415926535897932384626433832795) * near;
 	double fW = fH * aspect;
-
+	if(wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glFrustum(-fW, fW, -fH, fH, near, far);
 
@@ -210,7 +225,7 @@ int main(int argc, char* argv[])
 
 	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat light0_position[] = { 0.0, -1.0, -1.0, 0.0 };
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glShadeModel(GL_SMOOTH);
 	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
@@ -220,7 +235,7 @@ int main(int argc, char* argv[])
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_NORMALIZE);
 
-	dcel.readOBJ("cube.obj");
+	dcel.readOBJ("rekt.obj");
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);
