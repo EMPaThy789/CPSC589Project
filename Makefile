@@ -3,7 +3,7 @@ LIBS = -lglfw -lGL -lGLU
 OBJS = main.o DCEL.o
 
 
-$(EXEFILE): main.o
+$(EXEFILE): main.o DCEL.o
 	g++ $(LIBS) -o $(EXEFILE) $(OBJS)
 	
 clean:

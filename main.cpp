@@ -8,14 +8,14 @@ Kiranpreet Bajwa
 Aleks Djuric
 */
 #include <GLFW/glfw3.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <iostream>
 #include <math.h>
 #include <vector>
 #include <string> 
 #include <stdlib.h>
 #include "DCEL.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 using namespace std;
 
@@ -26,12 +26,12 @@ struct Point
 
 GLFWwindow *window;
 int w, h;
-float x, y, z, rY, rX,lx,ly,lz =0;
-
+float x, y, z, rY, rX, lx,ly,lz =0;;
+int wireframe = 0;
 double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
           WINDOW_WIDTH = 800;
-          Vertex* somePoint;
+           Vertex* somePoint;
 
 DCEL dcel;
 
@@ -51,7 +51,7 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 		z += 0.1;
 	}
 	
-	//LIGHT CONTROLS
+		//LIGHT CONTROLS
 	if (key == GLFW_KEY_U && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		lx -= 0.4;
@@ -76,7 +76,7 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		lz -= 0.4;
 	}
-
+	
 	/* these seem a bit rekt atm so dont use
 	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
@@ -94,6 +94,10 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		y += 0.1;
 	}*/
+	if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS))
+	{
+		dcel.subdivide();
+	}
 
 	// rotation
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
@@ -112,9 +116,16 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		rX += 2;
 	}
-	
-	
-	
+
+	if (key == GLFW_KEY_M && (action == GLFW_PRESS) )
+	{
+		if (wireframe)
+			wireframe = 0;
+		else 
+			wireframe = 1;
+	}
+		
+		
 	if (key == GLFW_KEY_KP_7 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		somePoint->x -= 1;
@@ -139,6 +150,7 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 	{
 		somePoint->z +=1;
 	}
+	
 	
 }
 
@@ -194,8 +206,6 @@ void mouseClick (GLFWwindow *sender, int button, int action, int mods) {
 }
 
 
-
-
 void mousePos(GLFWwindow *sender, double x, double y)
 {
 	mouseX = x;
@@ -206,7 +216,6 @@ void render()
 {
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 	//Functions for changing transformation matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -217,19 +226,6 @@ void render()
 	glRotatef(rY, 0.0f, 1.0f, 0.0f);
 	glRotatef(rX, 1.0f, 0.0f, 0.0f);
 	//glScalef(0.5f, 0.5f, 0.5f);
-	
-	
-	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light0_position[] = { 0.0+lx, -1.0+ly, -1.0+lz, 0.0 };
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_SMOOTH);
-	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_NORMALIZE);
 
 	//Functions for changing projection mdatrix
 	glMatrixMode(GL_PROJECTION);
@@ -243,7 +239,10 @@ void render()
 
 	double fH = tan(fov / 360 * 3.1415926535897932384626433832795) * near;
 	double fW = fH * aspect;
-
+	if(wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glFrustum(-fW, fW, -fH, fH, near, far);
 
@@ -303,6 +302,7 @@ int main(int argc, char* argv[])
 	z = -10;
 	rX = 0;
 	rY = 0;
+	
 
 
 	if (!glfwInit())
@@ -317,8 +317,19 @@ int main(int argc, char* argv[])
 	glfwSetCursorPosCallback(window, mousePos);
 
 
+	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light0_position[] = { 0.0+lx, -1.0+ly, -1.0+lz, 0.0 };
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
 
-	dcel.readOBJ("cad.obj");
+	dcel.readOBJ("rekt.obj");
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);
@@ -328,9 +339,6 @@ int main(int argc, char* argv[])
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		
-		
-		
 	}
 
 	glfwDestroyWindow(window);
