@@ -14,7 +14,7 @@ Aleks Djuric
 #include <string> 
 #include <stdlib.h>
 #include "DCEL.h"
-#include <OPENGL/gl.h>
+#include <OPENGL/gl.h> //@TODO: Change OPENGL to GL before handing in.
 #include <OPENGL/glu.h>
 
 using namespace std;
@@ -181,7 +181,7 @@ void mouseClick (GLFWwindow *sender, int button, int action, int mods) {
                
                cout << "WINX IS: " << winX << endl;
                cout << "WINY is: " << winY << endl;
-               cout << "WINZ is : " << winZ << endl;       
+               cout << "WINZ is : " << winZ << endl;
 
                
                for(int i=0; i < dcel.vertexList.size();i++){
@@ -191,7 +191,7 @@ void mouseClick (GLFWwindow *sender, int button, int action, int mods) {
 			   
 			   if((winX - vX) <= 5 && (winX - vX) >= -5 ){
 					if((winY -vY) <= 5 && (winY -vY) >= -5){
-						cout << "FOUND YOU" << endl;
+						cout << "Found Point: " << endl;
 				cout << "vX : " << vX << endl;
 			   cout << "vY : " << vY << endl;
 			   cout << "Vertex Z : " << dcel.vertexList[i]->z << endl;
@@ -329,7 +329,10 @@ int main(int argc, char* argv[])
 	glfwSetMouseButtonCallback(window, mouseClick);
 	glfwSetCursorPosCallback(window, mousePos);
 
-	dcel.readOBJ("rekt.obj");
+    string s = "";
+    cout << "Please enter file name" << endl;
+    cin >> s;
+	dcel.readOBJ(s);
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);

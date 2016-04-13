@@ -98,7 +98,6 @@ void DCEL::readOBJ(string fileName)
 				HalfEdge* he3 = (HalfEdge*)malloc(sizeof(struct HalfEdge));;
 				
 				
-				//TODO fix this shit
 				if (Edges[make_pair(var2, var3)] != NULL || Edges[make_pair(var3, var4)] != NULL || Edges[make_pair(var4, var2)] != NULL)
 				{
 					reverseFaceBoolean = 1;
@@ -207,6 +206,11 @@ void DCEL::readOBJ(string fileName)
 			cout << var1 << var2 << var3 << var4 << "\n";
 		}
 		file.close();
+        
+        cout << "Faces: " << faceList.size() << endl;
+        cout << "Half edges: " << halfEdgeList.size() << endl;
+        cout << "Vertices: " << vertexList.size() << endl;
+        
 	}
 }
 
@@ -394,6 +398,12 @@ void DCEL::subdivide()
 	vertexList.swap(tempVertexList);
 
 	cout << "done";
+    
+    cout << "Faces: " << faceList.size() << endl;
+    cout << "Half edges: " << halfEdgeList.size() << endl;
+    cout << "Vertices: " << vertexList.size() << endl;
+    
+    
 }
 
 // finds vertices used to make new edge vertex for a given half edge
@@ -576,7 +586,6 @@ void DCEL::subdivideFace(Face* f)
 
 	newFace4->halfEdge = newHe4;
 
-	// SHIT IS FUCKED
 	// assign faces
 	newHe4->face = newFace4;
 	newHe5->face = newFace4;
