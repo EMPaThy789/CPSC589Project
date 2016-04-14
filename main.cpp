@@ -329,7 +329,10 @@ int main(int argc, char* argv[])
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_NORMALIZE);
 
-	dcel.readOBJ("rekt.obj");
+    string str = "";
+    cout << "Enter file name (with the extension)" << endl;
+    cin >> str;
+	dcel.readOBJ(str);
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);

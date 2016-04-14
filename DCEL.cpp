@@ -203,6 +203,10 @@ void DCEL::readOBJ(string fileName)
 			cout << var1 << var2 << var3 << var4 << "\n";
 		}
 		file.close();
+        
+        cout << "Faces: " << faceList.size() << endl;
+        cout << "Half edges: " << halfEdgeList.size() << endl;
+        cout << "Vertices: " << vertexList.size() << endl;
 	}
 }
 
@@ -249,8 +253,6 @@ vector<Vertex> DCEL::findNeighbours(Vertex v) {
 	// last halfEdge to visit
 	HalfEdge * endEdge = e;
 
-	// starting edge for face
-	HalfEdge* startEdge = e;
 
 	do
 	{
@@ -270,12 +272,10 @@ int DCEL::countNeighbours(Vertex v)
 	// last halfEdge to visit
 	HalfEdge* endEdge = e;
 
-	// starting edge for face
-	HalfEdge* startEdge = e;
+
 
 	do
 	{
-		Vertex neighbour = *e->vertex;
  		neigh = neigh + 1;
 		e = e->next->pair;
 	} while (e != endEdge);
@@ -392,6 +392,10 @@ void DCEL::subdivide()
 	vertexList.swap(tempVertexList);
 
 	cout << "done";
+    
+    cout << "Faces: " << faceList.size() << endl;
+    cout << "Half edges: " << halfEdgeList.size() << endl;
+    cout << "Vertices: " << vertexList.size() << endl;
 }
 
 // finds vertices used to make new edge vertex for a given half edge
