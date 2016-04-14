@@ -11,7 +11,6 @@
 		3B1AC09B1C98D72C00F193DE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B1AC0941C98D72C00F193DE /* main.cpp */; };
 		3B1AC09F1C98D77000F193DE /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B1AC09E1C98D77000F193DE /* OpenGL.framework */; };
 		3B1AC0A11C98D78200F193DE /* libglfw.3.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B1AC0A01C98D78200F193DE /* libglfw.3.1.dylib */; };
-		3BD0CBC71CAB451D00644E60 /* loopDiv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BD0CBC51CAB451D00644E60 /* loopDiv.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,8 +32,6 @@
 		3B1AC0941C98D72C00F193DE /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
 		3B1AC09E1C98D77000F193DE /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		3B1AC0A01C98D78200F193DE /* libglfw.3.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.1.dylib; path = ../../../../../../../opt/local/lib/libglfw.3.1.dylib; sourceTree = "<group>"; };
-		3BD0CBC51CAB451D00644E60 /* loopDiv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loopDiv.cpp; sourceTree = SOURCE_ROOT; };
-		3BD0CBC81CAB45A500644E60 /* loopDiv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = loopDiv.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +71,6 @@
 				3B1AC08E1C98D72C00F193DE /* DCEL.cpp */,
 				3B1AC08F1C98D72C00F193DE /* DCEL.h */,
 				3B1AC0941C98D72C00F193DE /* main.cpp */,
-				3BD0CBC51CAB451D00644E60 /* loopDiv.cpp */,
-				3BD0CBC81CAB45A500644E60 /* loopDiv.h */,
 			);
 			path = Project;
 			sourceTree = "<group>";
@@ -136,7 +131,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BD0CBC71CAB451D00644E60 /* loopDiv.cpp in Sources */,
 				3B1AC09B1C98D72C00F193DE /* main.cpp in Sources */,
 				3B1AC0981C98D72C00F193DE /* DCEL.cpp in Sources */,
 			);

@@ -23,6 +23,7 @@ Aleks Djuric
 #include <fstream>
 #include <cstdlib>
 #include <string>
+#include <algorithm>
 #include <map>
 
 
@@ -47,6 +48,7 @@ struct Vertex
 	float nx;
 	float ny;
 	float nz;
+	
 
 };
 struct Face
@@ -68,13 +70,18 @@ public:
 	std::vector<Face*> faceList;
 	std::vector<Vertex*> vertexList;
 	std::vector<HalfEdge*> halfEdgeList;
+	std::vector<Vertex*> selectedPoints;
+	std::vector<Vertex*> tempSelectedPoints;
+	std::vector<HalfEdge*> selectedEdges;
 	// ## Constructor ##
 	DCEL();
 	// ## Functions ##
 	void readOBJ(std::string fileName);
 	void drawMesh();
-
+	void output();
 	void subdivide();
+	void findIgnoreEdges(Vertex* v);
+	
 
 private:
 	// ## Variables ##
@@ -87,13 +94,14 @@ private:
 	float getAlpha(int valence);
 	std::vector<Vertex> findNeighbours(Vertex v);
 	int countNeighbours(Vertex v);
-	Vertex* newVertexVertex(Vertex oldVert, int n);
+	Vertex* newVertexVertex(Vertex* oldVert, int n);
 	void insertVertexVertices();
 
 	Vertex* newEdgeVertex(HalfEdge *he);
 	void subdivideFace(Face* f);
-
+	
 	std::vector<Vertex*> findEdgeNeighbours(HalfEdge he);
+
 
 };
 

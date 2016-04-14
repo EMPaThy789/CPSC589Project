@@ -14,8 +14,9 @@ Aleks Djuric
 #include <string> 
 #include <stdlib.h>
 #include "DCEL.h"
-#include <OPENGL/gl.h> //@TODO: Change OPENGL to GL before handing in.
+#include <OPENGL/gl.h>
 #include <OPENGL/glu.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -31,7 +32,6 @@ int wireframe = 0;
 double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
           WINDOW_WIDTH = 800;
-           Vertex* somePoint;
 
 DCEL dcel;
 
@@ -77,23 +77,23 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 		lz += 0.4;
 	}
 	
-	/* these seem a bit rekt atm so dont use
-	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
+
+	if (key == GLFW_KEY_A && (action == GLFW_PRESS ))
 	{
-		x -= 0.1;
+		if(dcel.selectedPoints.size() > 0)
+		{
+			dcel.selectedPoints.clear();
+		} else
+		{
+			dcel.selectedPoints = dcel.vertexList;
+		}
+		dcel.selectedEdges.clear();
+		for ( int k = 0; k < dcel.selectedPoints.size();k++)
+		{
+			dcel.findIgnoreEdges(dcel.selectedPoints[k]);
+		}
 	}
-	if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		x += 0.1;
-	}
-	if (key == GLFW_KEY_Q && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		y -= 0.1;
-	}
-	if (key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		y += 0.1;
-	}*/
+
 	if (key == GLFW_KEY_SPACE && (action == GLFW_PRESS))
 	{
 		dcel.subdivide();
@@ -128,28 +128,46 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 		
 	if (key == GLFW_KEY_KP_7 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		somePoint->x -= 1;
+		for(int i = 0; i < dcel.selectedPoints.size(); i++){
+		dcel.selectedPoints[i]->x -= 1;
+		}
 	}
 	if (key == GLFW_KEY_KP_4 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		somePoint->x +=1;
+		for(int i = 0; i < dcel.selectedPoints.size(); i++){
+		dcel.selectedPoints[i]->x += 1;
+		}
 	}
 	if (key == GLFW_KEY_KP_8 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		somePoint->y -= 1;
+		for(int i = 0; i < dcel.selectedPoints.size(); i++){
+		dcel.selectedPoints[i]->y -= 1;
+		}
 	}
 	if (key == GLFW_KEY_KP_5 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		somePoint->y +=1;
+		for(int i = 0; i < dcel.selectedPoints.size(); i++){
+		dcel.selectedPoints[i]->y += 1;
+		}
 	}
 		if (key == GLFW_KEY_KP_9 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		somePoint->z -= 1;
+		for(int i = 0; i < dcel.selectedPoints.size(); i++){
+		dcel.selectedPoints[i]->z -= 1;
+		}
 	}
 	if (key == GLFW_KEY_KP_6 && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		somePoint->z +=1;
+		for(int i = 0; i < dcel.selectedPoints.size(); i++){
+		dcel.selectedPoints[i]->z += 1;
+		}
 	}
+	
+	if (key == GLFW_KEY_Z && (action == GLFW_PRESS))
+	{
+		dcel.output();
+	}
+	
 	
 	
 }
@@ -179,9 +197,10 @@ void mouseClick (GLFWwindow *sender, int button, int action, int mods) {
         //World coordinates from the given screen coordinates
      //   gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
                
-               cout << "WINX IS: " << winX << endl;
-               cout << "WINY is: " << winY << endl;
-               cout << "WINZ is : " << winZ << endl;
+               cout << "You Clicked the coordinates :" << endl;
+               cout << "X is: " << winX << endl;
+               cout << "Y is: " << winY << endl << endl;
+     
 
                
                for(int i=0; i < dcel.vertexList.size();i++){
@@ -189,15 +208,25 @@ void mouseClick (GLFWwindow *sender, int button, int action, int mods) {
 							modelview,projection,viewport, &vX, &vY, &vZ);
 
 			   
-			   if((winX - vX) <= 5 && (winX - vX) >= -5 ){
-					if((winY -vY) <= 5 && (winY -vY) >= -5){
-						cout << "Found Point: " << endl;
-				cout << "vX : " << vX << endl;
-			   cout << "vY : " << vY << endl;
-			   cout << "Vertex Z : " << dcel.vertexList[i]->z << endl;
-			   cout << "vZ : :" << vZ << endl;
-			   somePoint = dcel.vertexList[i];
-			   break;
+			   if((winX - vX) <= 8 && (winX - vX) >= -8 ){
+					if((winY -vY) <= 8 && (winY -vY) >= -8){
+							cout << "Vertex selected at: " << endl;
+							cout << "vX : " << vX << endl;
+							cout << "vY : " << vY << endl << endl;
+						if(dcel.selectedPoints.end() == find(dcel.selectedPoints.begin(),dcel.selectedPoints.end(),dcel.vertexList[i])){
+							dcel.selectedPoints.push_back(dcel.vertexList[i]);							
+						}
+						else{
+							dcel.selectedPoints.erase(remove(dcel.selectedPoints.begin(), dcel.selectedPoints.end(),dcel.vertexList[i]),dcel.selectedPoints.end());
+							cout << "Point has been removed" << endl;
+						}
+						
+						dcel.selectedEdges.clear();
+						for ( int k = 0; k < dcel.selectedPoints.size();k++)
+						{
+							dcel.findIgnoreEdges(dcel.selectedPoints[k]);
+						}
+						break;
 					}
 			   }
 			   
@@ -258,54 +287,17 @@ void render()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glFrustum(-fW, fW, -fH, fH, near, far);
-
+	
 	dcel.drawMesh();
 	
-	/*glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
-	// Top face (y = 1.0f)
-	// Define vertices in counter-clockwise (CCW) order with normal pointing out
-	glColor3f(0.0f, 1.0f, 0.0f);     // Green
-	glVertex3f(1.0f, 1.0f, -1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);
-
-	// Bottom face (y = -1.0f)
-	glColor3f(1.0f, 0.5f, 0.0f);     // Orange
-	glVertex3f(1.0f, -1.0f, 1.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);
-
-	// Front face  (z = 1.0f)
-	glColor3f(1.0f, 0.0f, 0.0f);     // Red
-	glVertex3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);
-
-	// Back face (z = -1.0f)
-	glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
-	glVertex3f(1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);
-	glVertex3f(1.0f, 1.0f, -1.0f);
-
-	// Left face (x = -1.0f)
-	glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-	glVertex3f(-1.0f, 1.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);
-
-	// Right face (x = 1.0f)
-	glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
-	glVertex3f(1.0f, 1.0f, -1.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);
-	glEnd();  // End of drawing color-cube*/
-
+	glColor3f(1.0f,0,0);
+	glPointSize(10);
+	glBegin(GL_POINTS);
+	for(int i = 0; i < dcel.selectedPoints.size();i++)
+	{
+		glVertex3f(dcel.selectedPoints[i]->x,dcel.selectedPoints[i]->y,dcel.selectedPoints[i]->z);
+	}
+	glEnd();
 }
 
 int main(int argc, char* argv[])
@@ -329,16 +321,30 @@ int main(int argc, char* argv[])
 	glfwSetMouseButtonCallback(window, mouseClick);
 	glfwSetCursorPosCallback(window, mousePos);
 
-    string s = "";
-    cout << "Please enter file name" << endl;
-    cin >> s;
-	dcel.readOBJ(s);
+
+	GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light0_position[] = { static_cast<GLfloat>(0.0+lx), static_cast<GLfloat>(-1.0+ly), static_cast<GLfloat>(-1.0+lz), 0.0 };
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	//glColorMaterial(GL_FRONT, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
+
+    string str = "";
+    cout << "Enter file name (with the extension)" << endl;
+    cin >> str;
+	dcel.readOBJ(str);
 	
 	while (!glfwWindowShouldClose(window)) {
 		glfwGetFramebufferSize(window, &w, &h);
 		glViewport(0, 0, w, h);
 
 		render();
+        
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

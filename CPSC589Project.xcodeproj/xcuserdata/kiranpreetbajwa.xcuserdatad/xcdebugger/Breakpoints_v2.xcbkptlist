@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "154"
             endingLineNumber = "154"
-            landmarkName = "DCEL::drawMesh()"
+            landmarkName = "DCEL::readOBJ(string fileName)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "DCEL::drawMesh()"
+            landmarkName = "DCEL::readOBJ(string fileName)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "47"
             endingLineNumber = "47"
-            landmarkName = "neighbours(Vertex v)"
+            landmarkName = "newVert(Vertex oldVert, int n)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
             endingLineNumber = "46"
-            landmarkName = "neighbours(Vertex v)"
+            landmarkName = "newVert(Vertex oldVert, int n)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
