@@ -15,6 +15,7 @@ Aleks Djuric
 #include "math.h"
 using namespace std;
 
+
 // Implementation of doublely connected edge list (DCEL) aka half-edge data structure
 
 // constructor
@@ -78,6 +79,10 @@ void DCEL::readOBJ(string fileName)
 					v->x = var2;
 					v->y = var3;
 					v->z = var4;
+                    
+                    v->nx = -1;
+                    v->ny = -1;
+                    v->nz = -1;
 					vertexList.push_back(v);
 				}
 			}
@@ -189,10 +194,6 @@ void DCEL::readOBJ(string fileName)
 					he3->pair = Edges[make_pair(vn3, vn1)];
 					Edges[make_pair(vn3, vn1)]->pair = he3;
 				}
-
-
-
-
 				
 				f->halfEdge = he1;
 				faceList.push_back(f);
@@ -293,17 +294,28 @@ float DCEL::getAlpha(int valence){
 }
 
 
-Vertex* DCEL::newVertexVertex(Vertex oldVert, int n)
+Vertex* DCEL::newVertexVertex(Vertex* oldVert, int n)
 {
+	
 	float alpha = 0.0;
 	Vertex* vNew = (Vertex*)malloc(sizeof(struct Vertex));
-	vector <Vertex> neighbour = findNeighbours(oldVert);
+	if (selectedPoints.end() != find(selectedPoints.begin(),selectedPoints.end(),oldVert))
+	{
+		vNew -> x = oldVert->x;
+		vNew -> y = oldVert->y;
+		vNew -> z = oldVert->z;
+		tempSelectedPoints.push_back(vNew);
+		return vNew;
+	}
+	
+	vector <Vertex> neighbour = findNeighbours(*oldVert);
 
+	
 	alpha = getAlpha(n);
 
-	vNew->x = (1.0 - n * alpha) * oldVert.x;
-	vNew->y = (1.0 - n * alpha) * oldVert.y;
-	vNew->z = (1.0 - n * alpha) * oldVert.z;
+	vNew->x = (1.0 - n * alpha) * oldVert->x;
+	vNew->y = (1.0 - n * alpha) * oldVert->y;
+	vNew->z = (1.0 - n * alpha) * oldVert->z;
 
 	Vertex sum;
 	sum.x = 0;
@@ -324,6 +336,10 @@ Vertex* DCEL::newVertexVertex(Vertex oldVert, int n)
 	vNew->x = vNew->x + sum.x;
 	vNew->y = vNew->y + sum.y;
 	vNew->z = vNew->z + sum.z;
+    
+    vNew->nx = -1;
+    vNew->ny = -1;
+    vNew->nz = -1;
 
 	return vNew;
 }
@@ -337,7 +353,7 @@ void DCEL::insertVertexVertices()
 		/*vertexList[i]->x = newVertexVertex(*vertexList[i], countNeighbours(*vertexList[i])).x;
 		vertexList[i]->y = newVertexVertex(*vertexList[i], countNeighbours(*vertexList[i])).y;
 		vertexList[i]->z = newVertexVertex(*vertexList[i], countNeighbours(*vertexList[i])).z;*/
-		Vertex* v = newVertexVertex(*vertexList[i], countNeighbours(*vertexList[i]));
+		Vertex* v = newVertexVertex(vertexList[i], countNeighbours(*vertexList[i]));
 		tempVertexList.push_back(v);
 		movedVertexVertices[vertexList[i]] = v;
 	}
@@ -446,9 +462,23 @@ Vertex* DCEL::newEdgeVertex(HalfEdge* he)
 		v = (Vertex*)malloc(sizeof(struct Vertex));
 		// keep the next of old halfedge about to be split
 
-		v->x = 3.0 / 8.0 * (edgeNeighbours[0]->x + edgeNeighbours[1]->x) + 1.0 / 8.0 * (edgeNeighbours[2]->x + edgeNeighbours[3]->x);
-		v->y = 3.0 / 8.0 * (edgeNeighbours[0]->y + edgeNeighbours[1]->y) + 1.0 / 8.0 * (edgeNeighbours[2]->y + edgeNeighbours[3]->y);
-		v->z = 3.0 / 8.0 * (edgeNeighbours[0]->z + edgeNeighbours[1]->z) + 1.0 / 8.0 * (edgeNeighbours[2]->z + edgeNeighbours[3]->z);
+		if(selectedEdges.end() == find(selectedEdges.begin(),selectedEdges.end(),he))
+		{
+			
+			v->x = 3.0 / 8.0 * (edgeNeighbours[0]->x + edgeNeighbours[1]->x) + 1.0 / 8.0 * (edgeNeighbours[2]->x + edgeNeighbours[3]->x);
+			v->y = 3.0 / 8.0 * (edgeNeighbours[0]->y + edgeNeighbours[1]->y) + 1.0 / 8.0 * (edgeNeighbours[2]->y + edgeNeighbours[3]->y);
+			v->z = 3.0 / 8.0 * (edgeNeighbours[0]->z + edgeNeighbours[1]->z) + 1.0 / 8.0 * (edgeNeighbours[2]->z + edgeNeighbours[3]->z);
+		}
+		else
+		{
+			v->x = 0.5 * (edgeNeighbours[0]->x + edgeNeighbours[1]->x);
+			v->y = 0.5 * (edgeNeighbours[0]->y + edgeNeighbours[1]->y);
+			v->z = 0.5 * (edgeNeighbours[0]->z + edgeNeighbours[1]->z);
+			tempSelectedPoints.push_back(v);
+		}
+        v->nx = -1;
+        v->ny = -1;
+        v->nz = -1;
 		// add newly created vertex to list
 		tempVertexList.push_back(v);
 	}
@@ -484,7 +514,7 @@ Vertex* DCEL::newEdgeVertex(HalfEdge* he)
 	}
 	else
 	{
-		cout << "wtf happened";
+		cout << "something bad happened";
 	}
 
 	// add to new list
@@ -574,7 +604,6 @@ void DCEL::subdivideFace(Face* f)
 
 	newFace4->halfEdge = newHe4;
 
-	// SHIT IS FUCKED
 	// assign faces
 	newHe4->face = newFace4;
 	newHe5->face = newFace4;
@@ -614,4 +643,53 @@ void DCEL::subdivideFace(Face* f)
 	// free mem
 
 
+}
+
+void DCEL::output()
+{
+	map<Vertex*, int> vertexNum;
+
+	ofstream myfile("output.obj");
+	if (myfile.is_open())
+	{
+		for (int i = 0; i < vertexList.size(); i++)
+		{
+			myfile << "v " << vertexList[i]->x << " " << vertexList[i]->y << " " << vertexList[i]->z << endl;
+			vertexNum[vertexList[i]] = i + 1;
+		}
+
+		for (int i = 0; i < faceList.size(); i++)
+		{
+			int v1 = vertexNum[faceList[i]->halfEdge->vertex];
+			int v2 = vertexNum[faceList[i]->halfEdge->next->vertex];
+			int v3 = vertexNum[faceList[i]->halfEdge->next->next->vertex];
+			myfile << "f " << v1 << " " << v2 << " " << v3 << endl;
+		}
+		cout << "output done" << endl;
+		myfile.close();
+	}
+	else cout << "Unable to open file";
+}
+
+void DCEL::findIgnoreEdges(Vertex* v) 
+{
+	HalfEdge* e = v->halfEdge->pair;
+
+	// last halfEdge to visit
+	HalfEdge * endEdge = e;
+
+	do
+	{		
+		// if edge is not already in selected edges
+		if( selectedEdges.end() == find(selectedEdges.begin(),selectedEdges.end(),e))
+		{	
+			// if point is selected
+			if(selectedPoints.end() != find(selectedPoints.begin(),selectedPoints.end(),e->vertex))
+			{
+				selectedEdges.push_back(e);
+				selectedEdges.push_back(e->pair);
+			}
+		}
+		e = e->next->pair;
+	} while (e != endEdge);
 }
