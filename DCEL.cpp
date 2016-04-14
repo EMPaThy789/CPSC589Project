@@ -407,7 +407,16 @@ void DCEL::subdivide()
 	halfEdgeList.swap(tempHalfEdgeList);
 	vertexList.swap(tempVertexList);
 
-	cout << "done";
+	selectedPoints.clear();
+	selectedPoints.swap(tempSelectedPoints);
+	tempSelectedPoints.clear();
+	selectedEdges.clear();
+	for ( int k = 0; k < selectedPoints.size();k++)
+	{
+		findIgnoreEdges(selectedPoints[k]);
+	}
+	
+	cout << "done" << endl;
     
     cout << "Faces: " << faceList.size() << endl;
     cout << "Half edges: " << halfEdgeList.size() << endl;

@@ -344,6 +344,7 @@ int main(int argc, char* argv[])
 		glViewport(0, 0, w, h);
 
 		render();
+        
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
