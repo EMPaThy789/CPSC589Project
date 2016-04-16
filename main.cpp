@@ -28,7 +28,7 @@ struct Point
 GLFWwindow *window;
 int w, h;
 float x, y, z, rY, rX, lx = 0,ly = 0,lz =0;
-int wireframe = 0;
+int wireframe = 1;
 double mouseX, mouseY;
 const int WINDOW_HEIGHT = 600,
           WINDOW_WIDTH = 800;
@@ -163,12 +163,27 @@ void keyboard(GLFWwindow *sender, int key, int scancode, int action, int mods)
 		}
 	}
 	
-	if (key == GLFW_KEY_Z && (action == GLFW_PRESS))
-	{
-		dcel.output();
-	}
-	
-	
+    if (key == GLFW_KEY_Z && (action == GLFW_PRESS))
+    {
+        dcel.output();
+    }
+    
+    if (key == GLFW_KEY_X && (action == GLFW_PRESS))
+    {
+        if (dcel.queuedPoints.size() == 0){
+            dcel.queuedPoints = dcel.selectedPoints;
+            cout<<"Selected these " << endl;
+        }
+        else
+        {
+            for(int i = 0; i < dcel.queuedPoints.size(); i++){
+                dcel.selectedPoints.push_back(dcel.queuedPoints[i]);
+            }
+            dcel.queuedPoints.clear();
+            cout << "Emptied queued points " << endl;
+        }
+        
+    }
 	
 }
 
@@ -290,7 +305,7 @@ void render()
 	
 	dcel.drawMesh();
 	
-	glColor3f(1.0f,0,0);
+	glColor3f(1.0f, 0.0, 0.0);
 	glPointSize(10);
 	glBegin(GL_POINTS);
 	for(int i = 0; i < dcel.selectedPoints.size();i++)
@@ -298,6 +313,16 @@ void render()
 		glVertex3f(dcel.selectedPoints[i]->x,dcel.selectedPoints[i]->y,dcel.selectedPoints[i]->z);
 	}
 	glEnd();
+    
+    glColor3f(1.0f, 0.5f, 0.0);
+    glPointSize(10);
+    glBegin(GL_POINTS);
+    for(int i = 0; i < dcel.queuedPoints.size();i++)
+    {
+        glVertex3f(dcel.queuedPoints[i]->x,dcel.queuedPoints[i]->y,dcel.queuedPoints[i]->z);
+    }
+    glEnd();
+    
 }
 
 int main(int argc, char* argv[])

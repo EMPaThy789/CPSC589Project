@@ -72,6 +72,7 @@ public:
 	std::vector<HalfEdge*> halfEdgeList;
 	std::vector<Vertex*> selectedPoints;
 	std::vector<Vertex*> tempSelectedPoints;
+    std::vector<Vertex*> queuedPoints;
 	std::vector<HalfEdge*> selectedEdges;
 	// ## Constructor ##
 	DCEL();

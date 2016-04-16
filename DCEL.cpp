@@ -37,6 +37,7 @@ void DCEL::readOBJ(string fileName)
 
 	if (!file.is_open()){
 		cout << "Error could not open file" << endl;
+        exit(-1);
 	}
 	else {
 		//parse the vertices and faces
@@ -388,6 +389,7 @@ void DCEL::subdivide()
 
 	splitHalfEdges.clear();
 	movedVertexVertices.clear();
+    queuedPoints.clear();
 
 
 	insertVertexVertices();
